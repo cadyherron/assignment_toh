@@ -3,7 +3,6 @@
 # game board is printed with height specified by user
 # user is prompted to enter a move 
 # check for valid user input
-
 # move a disk according to user input
 # `render` method prints the current game board
 # check if user has won, otherwise prompt user for another input
@@ -11,6 +10,7 @@
 
 # game quits when user enters `quit` or wins
 
+require 'pry'
 
 
 class TowerofHanoi
@@ -31,19 +31,20 @@ class TowerofHanoi
   def make_gameboard(height)
     gameboard = []
     # initialize array of arrays with n rows filled with 0
-    (height).times { gameboard << Array.new(height, 0) }
-    # bottom row is 1..height, doesn't change
-    gameboard << (1..height).to_a
+    (height).times { gameboard << Array.new(3, 0) }
+    # bottom row is 1..3, doesn't change
+    gameboard << (1..3).to_a
     # add the rings to column 1 (which is really index 0)
     ring_size = 1
-    ring_row = 0
-      while ring_size < height+1
-        gameboard[ring_row][0] = ring_size
+    ring_column = 0
+      while ring_size <= height
+        gameboard[ring_column][0] = ring_size
         ring_size += 1
-        ring_row += 1
+        ring_column += 1
       end
 
     print gameboard
+    return gameboard
 
   end
 
@@ -52,7 +53,7 @@ class TowerofHanoi
     # TODO: make this validation correct, maybe use regex?
     input_array = nil
     until input_array.is_a?(Array) # && input.length == 2
-      puts "Enter move >"
+      puts "\nEnter move >"
       input = gets.chomp
       # `gets` returns a string, need to chop it into an array
       input_array = input[1..-2].split(',').collect! {|n| n.to_i}
@@ -60,33 +61,87 @@ class TowerofHanoi
     return input_array
   end
 
+
   def validate_move
     # make sure the move is physically possible
     # condition 1: ring has no rings on top of it
     # condition 2: ring is moving to a column that is not full
   end
 
-  def move_disk(input_array)
 
-
-
+  def remove_disk(input_array, gameboard)
+    from_column = input_array[0]-1 # [1] column, really 0
+    # find top-most disk in from_column
+    row = 0
+    disk_to_move = false
+    until disk_to_move
+      if gameboard[row][from_column] == 0
+        first_row +=1
+      else
+        disk_to_move = gameboard[row][from_column]
+        # replace disk with 0
+        gameboard[row][from_column] = 0
+      end
+      return disk_to_move
+    end
   end
+
+
+  def move_disk_to_new_column(input_array, gameboard, disk_to_move)
+    to_column = input_array[1]-1  # [3] column, really 2
+    # move disk to lowest 0 in to_column
+    bottom_row = @height-1
+    @height.times do
+      if gameboard[bottom_row][to_column] == 0
+        gameboard[bottom_row][to_column] = disk_to_move
+        break
+      else
+        bottom_row -= 1
+      end
+    end
+    print gameboard
+    return gameboard
+  end
+
+
+  def user_has_won?(gameboard)
+    solution = (1..@height).to_a
+    row_index = 0
+    column_index = 0
+    (@height-1).times  # go through the rows
+      if gameboard[row_index][column_index] < gameboard[row_index+1][column_index]
+        row_index += 1
+        return true
+      else
+        return false
+      end
+  end
+
 
 
   def play
     print_instructions
-    make_gameboard(height)
+    gameboard = make_gameboard(@height)
 
+    input = ""
+    while input != "q"
 
+      input_array = user_input
+      validate_move
+      disk_to_move = remove_disk(input_array, gameboard)
+      move_disk_to_new_column(input_array, gameboard, disk_to_move)
 
+    end
 
   end
 
 
 
+end # end of class
 
-end
 
 
-t = TowerofHanoi.new(3)
-t.play
+
+
+# t = TowerofHanoi.new(3)
+# t.play
