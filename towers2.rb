@@ -65,7 +65,7 @@ class TowerofHanoi
     from_column = (input_array[0]-1)
     to_column = (input_array[1]-1)
     # condition 1: to_column ring is empty
-    if gameboard[to_column].empty?
+    if gameboard[from_column].empty?
         print "You cannot move disks from empty towers. Try again."
         user_input
       end
@@ -89,18 +89,7 @@ class TowerofHanoi
 
   def user_has_won?(gameboard)
     winning_tower = (1..@height).to_a.reverse
-    print "\nwinning tower:", winning_tower
-    gameboard.each do |tower|
-        print "tower: ", tower
-      if tower == winning_tower
-        print "user is winning here?"
-        print "true"
-        true
-      else
-        print "false"
-        false
-      end
-    end
+    gameboard.include? winning_tower
   end
 
 
@@ -112,11 +101,13 @@ class TowerofHanoi
 
     loop do
       input_array = user_input
-      # validate_move(gameboard, input_array)
+      validate_move(gameboard, input_array)
       new_gameboard = move_disk(gameboard, input_array)
-      if user_has_won?(new_gameboard)
+      if user_has_won?(new_gameboard) == true
         print "\nCongratulations, you win!"
         return
+      else
+        gameboard = new_gameboard
       end
 
     end
@@ -131,5 +122,5 @@ end
 
 
 
-t = TowerofHanoi.new(3)
+t = TowerofHanoi.new(2)
 t.play
