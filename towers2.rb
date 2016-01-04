@@ -47,9 +47,14 @@ class TowerofHanoi
     input_array = nil
     puts "\nEnter move >"
     input = gets.chomp
+    if input == "q"
+      puts "Okay, bye!"
+      exit
     # `gets` returns a string, need to chop it into an array
-    input_array = input[1..3].split(',').collect! {|n| n.to_i}
-    return input_array
+    else
+      input_array = input[1..3].split(',').collect! {|n| n.to_i}
+      return input_array
+    end
   end
 
 
@@ -74,9 +79,9 @@ class TowerofHanoi
     winning_tower = (1..@height).to_a.reverse
     gameboard.each do |tower|
       if tower == winning_tower
-        return true
+        true
       else
-        return false
+        false
       end
     end
   end
@@ -92,7 +97,8 @@ class TowerofHanoi
       validate_move
       new_gameboard = move_disk(gameboard, input_array)
       if user_has_won?(new_gameboard)
-        print "Congratulations, you win!"
+        print "\nCongratulations, you win!"
+        return
       end
 
     end
@@ -107,5 +113,5 @@ end # end of class
 
 
 
-t = TowerofHanoi.new(3)
+t = TowerofHanoi.new(1)
 t.play
