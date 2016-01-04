@@ -61,19 +61,14 @@ class TowerofHanoi
   end
 
 
-  def validate_move(gameboard, input_array)
+  def valid_move?(gameboard, input_array)
     from_column = (input_array[0]-1)
     to_column = (input_array[1]-1)
-    # condition 1: to_column ring is empty
+    # condition 1: from_column ring is empty
     if gameboard[from_column].empty?
-        print "You cannot move disks from empty towers. Try again."
-        user_input
-      end
-
-
-
-    # condition 1: ring has no rings on top of it
-    # condition 2: ring is moving to a column that is not full
+      print "You cannot move disks from empty towers. Try again."
+      return false
+    end
   end
 
 
@@ -101,8 +96,8 @@ class TowerofHanoi
 
     loop do
       input_array = user_input
-      validate_move(gameboard, input_array)
       new_gameboard = move_disk(gameboard, input_array)
+
       if user_has_won?(new_gameboard) == true
         print "\nCongratulations, you win!"
         return
@@ -122,5 +117,5 @@ end
 
 
 
-t = TowerofHanoi.new(2)
-t.play
+# t = TowerofHanoi.new(2)
+# t.play
