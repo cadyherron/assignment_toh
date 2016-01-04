@@ -43,17 +43,19 @@ class TowerofHanoi
 
 
   def user_input
-    # TODO: make this validation correct, maybe use regex?
     input_array = nil
     puts "\nEnter move >"
     input = gets.chomp
     if input == "q"
       puts "Okay, bye!"
       exit
-    # `gets` returns a string, need to chop it into an array
+    # regex for user input, accepts an array with 1, 2, or 3 only
+    elsif input !~ /\[[123].[123]\]/
+      print "Please enter a valid array"
+      user_input
     else
+      # `gets` returns a string, need to chop it into an array
       input_array = input[1..3].split(',').collect! {|n| n.to_i}
-      return input_array
     end
   end
 
