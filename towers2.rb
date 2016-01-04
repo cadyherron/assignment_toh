@@ -52,6 +52,7 @@ class TowerofHanoi
     # regex for user input, accepts an array with 1, 2, or 3 only
     elsif input !~ /\[[123].[123]\]/
       print "Please enter a valid array"
+      # prompt user for another input
       user_input
     else
       # `gets` returns a string, need to chop it into an array
@@ -60,8 +61,17 @@ class TowerofHanoi
   end
 
 
-  def validate_move
-    # make sure the move is physically possible
+  def validate_move(gameboard, input_array)
+    from_column = (input_array[0]-1)
+    to_column = (input_array[1]-1)
+    # condition 1: to_column ring is empty
+    if gameboard[to_column].empty?
+        print "You cannot move disks from empty towers. Try again."
+        user_input
+      end
+
+
+
     # condition 1: ring has no rings on top of it
     # condition 2: ring is moving to a column that is not full
   end
@@ -79,14 +89,20 @@ class TowerofHanoi
 
   def user_has_won?(gameboard)
     winning_tower = (1..@height).to_a.reverse
+    print "\nwinning tower:", winning_tower
     gameboard.each do |tower|
+        print "tower: ", tower
       if tower == winning_tower
+        print "user is winning here?"
+        print "true"
         true
       else
+        print "false"
         false
       end
     end
   end
+
 
 
 
@@ -96,7 +112,7 @@ class TowerofHanoi
 
     loop do
       input_array = user_input
-      validate_move
+      # validate_move(gameboard, input_array)
       new_gameboard = move_disk(gameboard, input_array)
       if user_has_won?(new_gameboard)
         print "\nCongratulations, you win!"
@@ -109,11 +125,11 @@ class TowerofHanoi
 
 
 
-end # end of class
+end
 
 
 
 
 
-t = TowerofHanoi.new(1)
+t = TowerofHanoi.new(3)
 t.play
